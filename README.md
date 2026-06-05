@@ -36,7 +36,7 @@ Edit `config.json`:
 
 ### 2. Write a post
 
-A sample post (`posts/hello-world.md`) is included — delete or replace it.
+A sample post (`posts/hello-world.md`) is included - delete or replace it.
 
 Create a `.md` file in `posts/`:
 
