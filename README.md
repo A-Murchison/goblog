@@ -8,36 +8,6 @@ Drop Markdown files into `posts/`, run one command, get a blog.
 
 Configure the items in the templates folder to make it your own.
 
-## Features
-
-- Markdown → HTML via [gomarkdown](https://github.com/gomarkdown/markdown)
-- YAML frontmatter (`title`, `date`, `description`, `tags`)
-- Self-contained HTML templates (inline CSS, no external dependencies)
-- Optional `static/` directory for assets
-- GitHub Actions workflow for auto-deploy to GitHub Pages on push to `main`
-
-## Project Structure
-
-```
-goblog/
-├── internal/
-│   ├── config/config.go        # Loads config.json
-│   ├── parser/markdown.go      # Markdown + frontmatter → HTML
-│   └── generator/generator.go  # Orchestrates the build
-├── templates/
-│   ├── base.html               # Shared HTML layout + CSS
-│   ├── post.html               # Individual post view
-│   ├── index.html              # Post listing
-│   └── tag.html                # Tag listing
-├── posts/                      # Your Markdown blog posts
-│   └── hello-world.md
-├── static/                     # Optional: images, fonts, etc.
-├── public/                     # Generated output (git-ignored)
-├── config.json                 # Site metadata
-├── main.go                     # CLI entrypoint
-└── .github/workflows/deploy.yml
-```
-
 ## Quick Start
 
 ### 1. Clone and configure
@@ -87,7 +57,6 @@ Static files are written to `public/`.
 go run main.go serve        # http://localhost:8080
 go run main.go serve 3000   # http://localhost:3000
 ```
-
 ## Deploying to GitHub Pages
 
 1. Push the repo to GitHub
@@ -95,6 +64,36 @@ go run main.go serve 3000   # http://localhost:3000
 3. Under **Source**, select **GitHub Actions**
 
 The included workflow builds and deploys on every push to `main`.
+
+## Features
+
+- Markdown → HTML via [gomarkdown](https://github.com/gomarkdown/markdown)
+- YAML frontmatter (`title`, `date`, `description`, `tags`)
+- Self-contained HTML templates (inline CSS, no external dependencies)
+- Optional `static/` directory for assets
+- GitHub Actions workflow for auto-deploy to GitHub Pages on push to `main`
+
+## Project Structure
+
+```
+goblog/
+├── internal/
+│   ├── config/config.go        # Loads config.json
+│   ├── parser/markdown.go      # Markdown + frontmatter → HTML
+│   └── generator/generator.go  # Orchestrates the build
+├── templates/
+│   ├── base.html               # Shared HTML layout + CSS
+│   ├── post.html               # Individual post view
+│   ├── index.html              # Post listing
+│   └── tag.html                # Tag listing
+├── posts/                      # Your Markdown blog posts
+│   └── hello-world.md
+├── static/                     # Optional: images, fonts, etc.
+├── public/                     # Generated output (git-ignored)
+├── config.json                 # Site metadata
+├── main.go                     # CLI entrypoint
+└── .github/workflows/deploy.yml
+```
 
 ## Static Assets
 
