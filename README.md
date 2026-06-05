@@ -34,7 +34,7 @@ Edit `config.json`:
 }
 ```
 
-`contentTypes` is optional — it defaults to `["posts"]` if omitted.
+`contentTypes` is optional - it defaults to `["posts"]` if omitted.
 
 ### 2. Write a post
 
