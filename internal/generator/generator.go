@@ -61,6 +61,23 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 
 	year := time.Now().Year()
 
+	// Reserved output directory names that content types must not collide with.
+	reservedNames := map[string]bool{"tags": true, "static": true}
+
+	// Validate all content types before doing any filesystem work.
+	for _, contentType := range site.ContentTypes {
+		if contentType == "" {
+			return fmt.Errorf("invalid content type: name must not be empty")
+		}
+		// Reject anything that is not a plain single directory name (no separators, no . or ..).
+		if filepath.Base(contentType) != contentType || contentType == "." || contentType == ".." {
+			return fmt.Errorf("invalid content type %q: must be a single directory name with no path separators", contentType)
+		}
+		if reservedNames[contentType] {
+			return fmt.Errorf("invalid content type %q: name is reserved", contentType)
+		}
+	}
+
 	// Load and render all configured content types.
 	// contentItems maps each type to its sorted items for use by the homepage and tag pages.
 	contentItems := make(map[string][]*PostView)
