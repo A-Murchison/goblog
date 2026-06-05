@@ -241,6 +241,9 @@ func copyDir(src, dst string) error {
 		if info.IsDir() {
 			return os.MkdirAll(target, info.Mode())
 		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return nil
+		}
 		data, err := os.ReadFile(path)
 		if err != nil {
 			return err
