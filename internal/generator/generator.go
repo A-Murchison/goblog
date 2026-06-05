@@ -41,7 +41,7 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 		return fmt.Errorf("loading config: %w", err)
 	}
 	if baseURLOverride != "" {
-		site.BaseURL = baseURLOverride
+		site.BaseURL = strings.TrimRight(baseURLOverride, "/") + "/"
 	}
 
 	tmplDir := filepath.Join(rootDir, "templates")
