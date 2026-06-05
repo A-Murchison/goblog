@@ -2,7 +2,7 @@
 {{define "meta-description"}}{{.Post.Description}}{{end}}
 
 {{define "content"}}
-<a href="/" class="back-link">← All posts</a>
+<a href="./" class="back-link">← All posts</a>
 <article>
   <h1>{{.Post.Title}}</h1>
   <span class="post-meta">
@@ -12,7 +12,7 @@
   {{.Post.Content}}
   {{if .Post.Tags}}
   <div class="tags">
-    {{range .Post.Tags}}<a href="/tags/{{.}}/" class="tag">{{.}}</a>{{end}}
+    {{range .Post.Tags}}<a href="tags/{{.}}/" class="tag">{{.}}</a>{{end}}
   </div>
   {{end}}
 </article>

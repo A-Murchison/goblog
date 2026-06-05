@@ -102,11 +102,15 @@ The `.github/workflows/deploy.yml` workflow builds the site and deploys it autom
 
 ## Adding Static Assets
 
-Place files in the `static/` directory - they are copied to `public/static/` during the build:
+Place files in the `static/` directory - they are copied to `public/static/` during the build.
+
+Use root-absolute paths in your Markdown - the generator automatically rewrites them to the correct base URL at build time:
 
 ```markdown
 ![My image](/static/my-image.png)
 ```
+
+When running `go run main.go serve`, paths resolve to `http://localhost:8080/static/...`. When running `go run main.go build`, they resolve to the `baseURL` in `config.json`.
 
 ## Frontmatter Reference
 
@@ -119,9 +123,6 @@ Place files in the `static/` directory - they are copied to `public/static/` dur
 
 If `title` is omitted, the filename is used (hyphens replaced with spaces).
 
-## License
-
-MIT
 ├── templates/ ← HTML templates (header, footer, layout)
 │ └── layout.html
 │

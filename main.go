@@ -19,7 +19,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "build":
-		build()
+		buildSite("")
 
 	case "serve":
 		port := defaultPort
@@ -28,7 +28,7 @@ func main() {
 		}
 		// Build first so the server always has up-to-date content.
 		fmt.Println("Building site...")
-		build()
+		buildSite("http://localhost:" + port)
 		serve(port)
 
 	default:
@@ -47,8 +47,8 @@ func serve(port string) {
 	}
 }
 
-func build() {
-	if err := generator.Build(".", outputDir); err != nil {
+func buildSite(baseURLOverride string) {
+	if err := generator.Build(".", outputDir, baseURLOverride); err != nil {
 		fmt.Fprintf(os.Stderr, "Build error: %v\n", err)
 		os.Exit(1)
 	}

@@ -19,7 +19,7 @@ type Post struct {
 }
 
 // ParseFile parses a Markdown file with optional YAML frontmatter.
-// src is the raw file bytes; filename is used only for error messages.
+// src is the raw file bytes; filename is reserved for future error reporting.
 func ParseFile(_ string, src []byte) (*Post, error) {
 	post := &Post{}
 	body := parseFrontmatter(src, post)
@@ -86,7 +86,7 @@ func mdToHTML(src []byte) []byte {
 	p := parser.NewWithExtensions(extensions)
 	doc := p.Parse(src)
 
-	flags := html.CommonFlags | html.HrefTargetBlank
+	flags := html.CommonFlags | html.HrefTargetBlank | html.SkipHTML
 	renderer := html.NewRenderer(html.RendererOptions{Flags: flags})
 	return markdown.Render(doc, renderer)
 }

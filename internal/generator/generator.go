@@ -34,10 +34,14 @@ type PageData struct {
 }
 
 // Build reads posts from rootDir/posts/, renders HTML, and writes to outputDir.
-func Build(rootDir, outputDir string) error {
+// baseURLOverride, if non-empty, replaces site.BaseURL (useful for local serve).
+func Build(rootDir, outputDir, baseURLOverride string) error {
 	site, err := config.Load(rootDir)
 	if err != nil {
 		return fmt.Errorf("loading config: %w", err)
+	}
+	if baseURLOverride != "" {
+		site.BaseURL = baseURLOverride
 	}
 
 	tmplDir := filepath.Join(rootDir, "templates")
@@ -114,15 +118,23 @@ func Build(rootDir, outputDir string) error {
 	}
 
 	// Build tag index: group posts by tag.
+	// tagsOutDir is defined here so tags can be validated against it before use.
+	tagsOutDir := filepath.Join(outputDir, "tags")
 	tagMap := make(map[string][]*PostView)
 	for _, post := range posts {
 		for _, tag := range post.Tags {
+			// Safety: reject tags that would escape the tags output directory.
+			candidate := filepath.Join(tagsOutDir, tag)
+			rel, relErr := filepath.Rel(tagsOutDir, candidate)
+			if relErr != nil || rel == "." || strings.HasPrefix(rel, "..") {
+				fmt.Printf("  Skipping unsafe tag %q\n", tag)
+				continue
+			}
 			tagMap[tag] = append(tagMap[tag], post)
 		}
 	}
 
 	// Render tag pages (clean URLs: tags/{tag}/index.html).
-	tagsOutDir := filepath.Join(outputDir, "tags")
 	if err := os.MkdirAll(tagsOutDir, 0755); err != nil {
 		return fmt.Errorf("creating tags output dir: %w", err)
 	}
@@ -171,6 +183,12 @@ func Build(rootDir, outputDir string) error {
 	return nil
 }
 
+func rewriteStaticPaths(content string) string {
+	content = strings.ReplaceAll(content, `src="/static/`, `src="static/`)
+	content = strings.ReplaceAll(content, `href="/static/`, `href="static/`)
+	return content
+}
+
 func loadPosts(postsDir string) ([]*PostView, error) {
 	entries, err := os.ReadDir(postsDir)
 	if err != nil {
@@ -204,7 +222,7 @@ func loadPosts(postsDir string) ([]*PostView, error) {
 			Description: post.Description,
 			Tags:        post.Tags,
 			Slug:        slug,
-			Content:     template.HTML(post.Content), // safe: generated from our own markdown
+			Content:     template.HTML(rewriteStaticPaths(post.Content)), // safe: HTML passthrough disabled in renderer
 		})
 	}
 	return posts, nil

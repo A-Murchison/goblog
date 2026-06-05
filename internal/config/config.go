@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Site holds site-wide metadata loaded from config.json.
@@ -26,5 +27,7 @@ func Load(rootDir string) (*Site, error) {
 	if err := json.Unmarshal(data, &site); err != nil {
 		return nil, fmt.Errorf("parsing config.json: %w", err)
 	}
+	// Ensure BaseURL always has a trailing slash for correct <base> href resolution.
+	site.BaseURL = strings.TrimRight(site.BaseURL, "/") + "/"
 	return &site, nil
 }

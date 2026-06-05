@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="{{.Site.BaseURL}}">
   <title>{{block "title" .}}{{.Site.Title}}{{end}}</title>
   <meta name="description" content="{{block "meta-description" .}}{{.Site.Description}}{{end}}">
   <style>
@@ -81,7 +82,7 @@
 <body>
   <header>
     <nav>
-      <a href="/" class="site-title">{{.Site.Title}}</a>
+      <a href="./" class="site-title">{{.Site.Title}}</a>
     </nav>
   </header>
   <main>
