@@ -12,7 +12,7 @@
   {{.Post.Content}}
   {{if .Post.Tags}}
   <div class="tags">
-    {{range .Post.Tags}}<span class="tag">{{.}}</span>{{end}}
+    {{range .Post.Tags}}<a href="/tags/{{.}}/" class="tag">{{.}}</a>{{end}}
   </div>
   {{end}}
 </article>

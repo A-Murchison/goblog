@@ -62,6 +62,20 @@
     /* Tags */
     .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 2rem; }
     .tag { background: #f0f2f5; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; color: var(--muted); }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1117;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --border: #2d3748;
+      }
+      article pre { background: #1e2330; }
+      article code { background: #1e2330; }
+      article pre code { background: none; }
+      article th { background: #1e2330; }
+      .tag { background: #1e2330; }
+    }
   </style>
 </head>
 <body>

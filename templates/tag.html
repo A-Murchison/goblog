@@ -1,7 +1,8 @@
-{{define "title"}}{{.Site.Title}}{{end}}
+{{define "title"}}#{{.Tag}} - {{.Site.Title}}{{end}}
 
 {{define "content"}}
-<h2 class="index-heading">Recent Posts</h2>
+<a href="/" class="back-link">← All posts</a>
+<h2 class="index-heading">Posts tagged &#34;{{.Tag}}&#34;</h2>
 {{if .Posts}}
 <ul class="post-list">
   {{range .Posts}}
@@ -9,11 +10,10 @@
     <h2><a href="/posts/{{.Slug}}/">{{.Title}}</a></h2>
     {{if not .Date.IsZero}}<time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>{{end}}
     {{if .Description}}<p class="desc">{{.Description}}</p>{{end}}
-    {{if .Tags}}<div class="tags">{{range .Tags}}<a href="/tags/{{.}}/" class="tag">{{.}}</a>{{end}}</div>{{end}}
   </li>
   {{end}}
 </ul>
 {{else}}
-<p>No posts yet. Add Markdown files to the <code>posts/</code> directory and run <code>go run main.go build</code>.</p>
+<p>No posts found for this tag.</p>
 {{end}}
 {{end}}

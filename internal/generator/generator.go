@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"encoding/xml"
 	"fmt"
 	"html/template"
 	"os"
@@ -27,7 +28,8 @@ type PostView struct {
 type PageData struct {
 	Site  *config.Site
 	Post  *PostView   // populated for post pages
-	Posts []*PostView // populated for the index page
+	Posts []*PostView // populated for the index and tag pages
+	Tag   string      // populated for tag pages
 	Year  int
 }
 
@@ -42,6 +44,7 @@ func Build(rootDir, outputDir string) error {
 	baseTmpl := filepath.Join(tmplDir, "base.html")
 	postTmpl := filepath.Join(tmplDir, "post.html")
 	indexTmpl := filepath.Join(tmplDir, "index.html")
+	tagTmpl := filepath.Join(tmplDir, "tag.html")
 
 	// Clean and recreate output directory.
 	if err := os.RemoveAll(outputDir); err != nil {
@@ -68,13 +71,17 @@ func Build(rootDir, outputDir string) error {
 
 	year := time.Now().Year()
 
-	// Render each post page.
+	// Render each post page (clean URLs: posts/{slug}/index.html).
 	for _, post := range posts {
 		tmpl, err := template.ParseFiles(baseTmpl, postTmpl)
 		if err != nil {
 			return fmt.Errorf("parsing post template: %w", err)
 		}
-		outPath := filepath.Join(postsOutDir, post.Slug+".html")
+		postDir := filepath.Join(postsOutDir, post.Slug)
+		if err := os.MkdirAll(postDir, 0755); err != nil {
+			return fmt.Errorf("creating post dir %s: %w", postDir, err)
+		}
+		outPath := filepath.Join(postDir, "index.html")
 		f, err := os.Create(outPath)
 		if err != nil {
 			return fmt.Errorf("creating %s: %w", outPath, err)
@@ -84,7 +91,7 @@ func Build(rootDir, outputDir string) error {
 		if err != nil {
 			return fmt.Errorf("rendering post %s: %w", post.Slug, err)
 		}
-		fmt.Printf("  Built: posts/%s.html\n", post.Slug)
+		fmt.Printf("  Built: posts/%s/\n", post.Slug)
 	}
 
 	// Render index page.
@@ -106,6 +113,46 @@ func Build(rootDir, outputDir string) error {
 		fmt.Println("  Built: index.html")
 	}
 
+	// Build tag index: group posts by tag.
+	tagMap := make(map[string][]*PostView)
+	for _, post := range posts {
+		for _, tag := range post.Tags {
+			tagMap[tag] = append(tagMap[tag], post)
+		}
+	}
+
+	// Render tag pages (clean URLs: tags/{tag}/index.html).
+	tagsOutDir := filepath.Join(outputDir, "tags")
+	if err := os.MkdirAll(tagsOutDir, 0755); err != nil {
+		return fmt.Errorf("creating tags output dir: %w", err)
+	}
+	var tagNames []string
+	for tag := range tagMap {
+		tagNames = append(tagNames, tag)
+	}
+	sort.Strings(tagNames)
+	for _, tag := range tagNames {
+		tmpl, err := template.ParseFiles(baseTmpl, tagTmpl)
+		if err != nil {
+			return fmt.Errorf("parsing tag template: %w", err)
+		}
+		tagDir := filepath.Join(tagsOutDir, tag)
+		if err := os.MkdirAll(tagDir, 0755); err != nil {
+			return fmt.Errorf("creating tag dir %s: %w", tagDir, err)
+		}
+		outPath := filepath.Join(tagDir, "index.html")
+		f, err := os.Create(outPath)
+		if err != nil {
+			return fmt.Errorf("creating %s: %w", outPath, err)
+		}
+		err = tmpl.ExecuteTemplate(f, "base", PageData{Site: site, Posts: tagMap[tag], Tag: tag, Year: year})
+		f.Close()
+		if err != nil {
+			return fmt.Errorf("rendering tag %s: %w", tag, err)
+		}
+		fmt.Printf("  Built: tags/%s/\n", tag)
+	}
+
 	// Copy static/ directory if it exists.
 	staticDir := filepath.Join(rootDir, "static")
 	if _, err := os.Stat(staticDir); err == nil {
@@ -114,6 +161,12 @@ func Build(rootDir, outputDir string) error {
 		}
 		fmt.Println("  Copied: static/")
 	}
+
+	// Generate sitemap.xml.
+	if err := renderSitemap(outputDir, site, posts, tagNames); err != nil {
+		return fmt.Errorf("generating sitemap: %w", err)
+	}
+	fmt.Println("  Built: sitemap.xml")
 
 	return nil
 }
@@ -176,4 +229,35 @@ func copyDir(src, dst string) error {
 		}
 		return os.WriteFile(target, data, info.Mode())
 	})
+}
+
+type sitemapURL struct {
+	Loc string `xml:"loc"`
+}
+
+type urlSet struct {
+	XMLName   xml.Name     `xml:"urlset"`
+	Namespace string       `xml:"xmlns,attr"`
+	URLs      []sitemapURL `xml:"url"`
+}
+
+func renderSitemap(outputDir string, site *config.Site, posts []*PostView, tags []string) error {
+	base := strings.TrimRight(site.BaseURL, "/")
+	var urls []sitemapURL
+	urls = append(urls, sitemapURL{Loc: base + "/"})
+	for _, post := range posts {
+		urls = append(urls, sitemapURL{Loc: base + "/posts/" + post.Slug + "/"})
+	}
+	for _, tag := range tags {
+		urls = append(urls, sitemapURL{Loc: base + "/tags/" + tag + "/"})
+	}
+	data, err := xml.MarshalIndent(urlSet{
+		Namespace: "http://www.sitemaps.org/schemas/sitemap/0.9",
+		URLs:      urls,
+	}, "", "  ")
+	if err != nil {
+		return err
+	}
+	content := []byte(xml.Header + string(data))
+	return os.WriteFile(filepath.Join(outputDir, "sitemap.xml"), content, 0644)
 }
