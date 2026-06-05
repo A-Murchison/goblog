@@ -30,7 +30,8 @@ Edit `config.json`:
   "title": "My Blog",
   "description": "Thoughts on software and life.",
   "baseURL": "https://yourusername.github.io/goblog",
-  "author": "Your Name"
+  "author": "Your Name",
+  "contentTypes": ["posts"]
 }
 ```
 
@@ -126,3 +127,39 @@ Paths resolve to `localhost:8080/static/...` when serving, or `baseURL/static/..
 | `tags`        | No       | `[go, web, tutorial]` |
 
 If `title` is omitted, the filename is used (hyphens → spaces).
+
+## Custom Content Types
+
+goblog can build multiple content sections beyond `posts`. Declare them in `config.json`:
+
+```json
+{
+  "contentTypes": ["posts", "projects"]
+}
+```
+
+Create a matching directory at the root of your repo for each type and add Markdown files to it:
+
+```
+goblog/
+├── posts/
+│   └── hello-world.md
+└── projects/
+    └── my-project.md
+```
+
+Each type is rendered to its own output directory:
+
+```
+public/
+├── posts/
+│   └── hello-world/index.html
+└── projects/
+    └── my-project/index.html
+```
+
+Tags are shared across all content types - a tag page will list items from every type that uses it. Tag page links resolve correctly for each type automatically.
+
+The homepage (`index.html`) shows only `posts` items by default. To display other content types on the homepage, edit `templates/index.html` directly.
+
+If `contentTypes` is omitted from `config.json`, goblog defaults to `["posts"]`.

@@ -7,7 +7,7 @@
 <ul class="post-list">
   {{range .Posts}}
   <li>
-    <h2><a href="posts/{{.Slug}}/">{{.Title}}</a></h2>
+    <h2><a href="{{.Type}}/{{.Slug}}/">{{.Title}}</a></h2>
     {{if not .Date.IsZero}}<time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>{{end}}
     {{if .Description}}<p class="desc">{{.Description}}</p>{{end}}
   </li>
