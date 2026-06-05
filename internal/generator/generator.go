@@ -84,11 +84,11 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 		}
 
 		// Render each item page (clean URLs: {type}/{slug}/index.html).
+		tmpl, err := template.ParseFiles(baseTmpl, postTmpl)
+		if err != nil {
+			return fmt.Errorf("parsing post template: %w", err)
+		}
 		for _, item := range items {
-			tmpl, err := template.ParseFiles(baseTmpl, postTmpl)
-			if err != nil {
-				return fmt.Errorf("parsing post template: %w", err)
-			}
 			itemDir := filepath.Join(typeOutDir, item.Slug)
 			if err := os.MkdirAll(itemDir, 0755); err != nil {
 				return fmt.Errorf("creating item dir %s: %w", itemDir, err)
