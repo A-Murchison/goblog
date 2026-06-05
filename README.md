@@ -11,7 +11,7 @@ Configure the items in the templates folder to make it your own.
 ## Quick Start
 
 ### 1. Clone and configure
-
+asdfasdfasdfasdfasdf
 ```bash
 git clone https://github.com/A-Murchison/goblog
 cd goblog
