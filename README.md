@@ -30,10 +30,11 @@ Edit `config.json`:
   "title": "My Blog",
   "description": "Thoughts on software and life.",
   "baseURL": "https://yourusername.github.io/goblog",
-  "author": "Your Name",
-  "contentTypes": ["posts"]
+  "author": "Your Name"
 }
 ```
+
+`contentTypes` is optional — it defaults to `["posts"]` if omitted.
 
 ### 2. Write a post
 
