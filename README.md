@@ -6,6 +6,8 @@ A minimal static site generator written in Go.
 
 Drop Markdown files into `posts/`, run one command, get a blog.
 
+Configure the items in the templates folder to make it your own.
+
 ## Features
 
 - Markdown → HTML via [gomarkdown](https://github.com/gomarkdown/markdown)
