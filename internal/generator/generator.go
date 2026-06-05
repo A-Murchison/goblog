@@ -107,12 +107,8 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 		}
 	}
 
-	// Homepage shows items from the "posts" type; falls back to the first content type.
-	homepageType := "posts"
-	if _, ok := contentItems[homepageType]; !ok {
-		homepageType = site.ContentTypes[0]
-	}
-	homepageItems := contentItems[homepageType]
+	// Homepage shows items from the "posts" type (matches templates/index.html).
+	homepageItems := contentItems["posts"]
 
 	// Render index page.
 	{
