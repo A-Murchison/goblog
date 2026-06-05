@@ -14,6 +14,7 @@
       --muted: #6b7280;
       --accent: #2563eb;
       --border: #e5e7eb;
+      --hover-bg: #f9fafb;
       --max-w: 720px;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --mono: "SF Mono", "Fira Code", Consolas, monospace;
@@ -33,14 +34,15 @@
     footer { border-top: 1px solid var(--border); padding: 1.5rem 0; text-align: center; color: var(--muted); font-size: 0.875rem; margin-top: auto; }
     /* Index */
     h2.index-heading { font-size: 1.5rem; margin-bottom: 1.5rem; }
-    .post-list { list-style: none; }
-    .post-list li { padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
-    .post-list li:first-child { padding-top: 0; }
-    .post-list h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
+    .post-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+    .post-list li { padding: 1.1rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; position: relative; transition: background 0.15s ease; }
+    .post-list li:hover { background: var(--hover-bg); }
+    .post-list h2 { font-size: 1.125rem; margin-bottom: 0.15rem; }
     .post-list h2 a { color: var(--text); }
     .post-list h2 a:hover { color: var(--accent); text-decoration: none; }
+    .post-list h2 a::after { content: ''; position: absolute; inset: 0; border-radius: 8px; }
     .post-list time { color: var(--muted); font-size: 0.875rem; }
-    .post-list .desc { margin-top: 0.35rem; color: var(--muted); font-size: 0.9375rem; }
+    .post-list .desc { margin-top: 0.25rem; color: var(--muted); font-size: 0.9375rem; }
     /* Article */
     .back-link { display: inline-flex; align-items: center; gap: 0.25rem; color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
     .back-link:hover { color: var(--accent); text-decoration: none; }
@@ -62,7 +64,8 @@
     article th, article td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
     article th { background: #f6f8fa; }
     /* Tags */
-    .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 2rem; }
+    .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+    article .tags { margin-top: 2rem; }
     .tag { background: #f0f2f5; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; color: var(--muted); }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -71,6 +74,7 @@
         --muted: #94a3b8;
         --accent: #60a5fa;
         --border: #2d3748;
+        --hover-bg: #161b27;
       }
       article pre { background: #1e2330; }
       article code { background: #1e2330; }
