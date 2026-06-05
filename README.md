@@ -1,14 +1,18 @@
 # goblog
 
-A fast, minimal **Static Site Generator** written in Go. Drop Markdown files into `posts/`, run one command, and get a static HTML blog ready to deploy on GitHub Pages - no database, no server, no build tools beyond Go itself.
+[example](https://a-murchison.github.io/goblog)
+
+A minimal static site generator written in Go.
+
+Drop Markdown files into `posts/`, run one command, get a blog.
 
 ## Features
 
 - Markdown → HTML via [gomarkdown](https://github.com/gomarkdown/markdown)
 - YAML frontmatter (`title`, `date`, `description`, `tags`)
-- Clean, self-contained HTML templates (inline CSS - no external dependencies)
-- Optional `static/` directory for images and other assets
-- GitHub Actions workflow - auto-builds and deploys to GitHub Pages on every push to `main`
+- Self-contained HTML templates (inline CSS, no external dependencies)
+- Optional `static/` directory for assets
+- GitHub Actions workflow for auto-deploy to GitHub Pages on push to `main`
 
 ## Project Structure
 
@@ -77,40 +81,29 @@ Static files are written to `public/`.
 ### 4. Preview locally
 
 ```bash
-go run main.go serve
+go run main.go serve        # http://localhost:8080
+go run main.go serve 3000   # http://localhost:3000
 ```
-
-Open [http://localhost:8080](http://localhost:8080).
-
-Or with a custom port
-
-```bash
-go run main.go serve 3000
-```
-
-Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploying to GitHub Pages
 
-### One-time setup
-
-1. Push this repo to GitHub
+1. Push the repo to GitHub
 2. Go to **Settings → Pages**
 3. Under **Source**, select **GitHub Actions**
 
-The `.github/workflows/deploy.yml` workflow builds the site and deploys it automatically on every push to `main`.
+The included workflow builds and deploys on every push to `main`.
 
-## Adding Static Assets
+## Static Assets
 
-Place files in the `static/` directory - they are copied to `public/static/` during the build.
+Place files in `static/` - they are copied to `public/static/` at build time.
 
-Use root-absolute paths in your Markdown - the generator automatically rewrites them to the correct base URL at build time:
+Reference them with root-absolute paths - the generator automatically rewrites to the correct base URL at build time:
 
 ```markdown
 ![My image](/static/my-image.png)
 ```
 
-When running `go run main.go serve`, paths resolve to `http://localhost:8080/static/...`. When running `go run main.go build`, they resolve to the `baseURL` in `config.json`.
+Paths resolve to `localhost:8080/static/...` when serving, or `baseURL/static/...` when building.
 
 ## Frontmatter Reference
 
@@ -121,20 +114,4 @@ When running `go run main.go serve`, paths resolve to `http://localhost:8080/sta
 | `description` | No       | `A short summary.`    |
 | `tags`        | No       | `[go, web, tutorial]` |
 
-If `title` is omitted, the filename is used (hyphens replaced with spaces).
-
-├── templates/ ← HTML templates (header, footer, layout)
-│ └── layout.html
-│
-├── main.go ← Your Go CLI tool
-│
-└── public/ ← GENERATED output (HTML files)
-├── index.html
-├── hello-world/
-│ └── index.html
-└── my-go-journey/
-└── index.html
-
-```
-
-```
+If `title` is omitted, the filename is used (hyphens → spaces).
