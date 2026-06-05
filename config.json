@@ -1,6 +1,6 @@
 {
-  "title": "My Blog",
-  "description": "Thoughts on software and life.",
-  "baseURL": "https://yourusername.github.io/your-repo-name",
-  "author": "Your Name"
+  "title": "goblog",
+  "description": "A simple blog built with Go and Markdown",
+  "baseURL": "https://a-murchison.github.io/goblog",
+  "author": "A-Murchison"
 }
