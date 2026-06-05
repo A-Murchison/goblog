@@ -2,7 +2,7 @@
 
 [example](https://a-murchison.github.io/goblog)
 
-A minimal static site generator written in Go.
+A minimal static site generator written in Go. Host your site free in Github Pages. 
 
 Drop Markdown files into `posts/`, run one command, get a blog.
 
