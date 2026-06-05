@@ -25,7 +25,8 @@ goblog/
 ├── templates/
 │   ├── base.html               # Shared HTML layout + CSS
 │   ├── post.html               # Individual post view
-│   └── index.html              # Post listing
+│   ├── index.html              # Post listing
+│   └── tag.html                # Tag listing
 ├── posts/                      # Your Markdown blog posts
 │   └── hello-world.md
 ├── static/                     # Optional: images, fonts, etc.
