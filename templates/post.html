@@ -1,0 +1,19 @@
+{{define "title"}}{{.Post.Title}} - {{.Site.Title}}{{end}}
+{{define "meta-description"}}{{.Post.Description}}{{end}}
+
+{{define "content"}}
+<a href="/" class="back-link">← All posts</a>
+<article>
+  <h1>{{.Post.Title}}</h1>
+  <span class="post-meta">
+    {{if not .Post.Date.IsZero}}{{.Post.Date.Format "January 2, 2006"}}{{end}}
+    {{if .Post.Description}} · {{.Post.Description}}{{end}}
+  </span>
+  {{.Post.Content}}
+  {{if .Post.Tags}}
+  <div class="tags">
+    {{range .Post.Tags}}<span class="tag">{{.}}</span>{{end}}
+  </div>
+  {{end}}
+</article>
+{{end}}

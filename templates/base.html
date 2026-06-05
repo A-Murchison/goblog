@@ -1,0 +1,81 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{block "title" .}}{{.Site.Title}}{{end}}</title>
+  <meta name="description" content="{{block "meta-description" .}}{{.Site.Description}}{{end}}">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --border: #e5e7eb;
+      --max-w: 720px;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: "SF Mono", "Fira Code", Consolas, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--sans); color: var(--text); background: var(--bg); line-height: 1.7; font-size: 1rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    /* Header */
+    header { border-bottom: 1px solid var(--border); padding: 1rem 0; }
+    header nav { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+    .site-title { font-weight: 700; font-size: 1.125rem; color: var(--text); }
+    .site-title:hover { text-decoration: none; color: var(--accent); }
+    /* Main */
+    main { max-width: var(--max-w); margin: 3rem auto; padding: 0 1.5rem; }
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 1.5rem 0; text-align: center; color: var(--muted); font-size: 0.875rem; margin-top: 4rem; }
+    /* Index */
+    h2.index-heading { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .post-list { list-style: none; }
+    .post-list li { padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
+    .post-list li:first-child { padding-top: 0; }
+    .post-list h2 { font-size: 1.25rem; margin-bottom: 0.2rem; }
+    .post-list h2 a { color: var(--text); }
+    .post-list h2 a:hover { color: var(--accent); text-decoration: none; }
+    .post-list time { color: var(--muted); font-size: 0.875rem; }
+    .post-list .desc { margin-top: 0.35rem; color: var(--muted); font-size: 0.9375rem; }
+    /* Article */
+    .back-link { display: inline-flex; align-items: center; gap: 0.25rem; color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    .back-link:hover { color: var(--accent); text-decoration: none; }
+    article h1 { font-size: 2rem; line-height: 1.25; margin-bottom: 0.5rem; }
+    article .post-meta { color: var(--muted); font-size: 0.875rem; display: block; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    article h2 { font-size: 1.5rem; margin: 2rem 0 0.75rem; }
+    article h3 { font-size: 1.25rem; margin: 1.75rem 0 0.5rem; }
+    article h4 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+    article p { margin-bottom: 1rem; }
+    article ul, article ol { margin: 0 0 1rem 1.5rem; }
+    article li { margin-bottom: 0.25rem; }
+    article pre { background: #f6f8fa; border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.25rem; overflow-x: auto; margin-bottom: 1.25rem; }
+    article code { font-family: var(--mono); font-size: 0.875em; background: #f0f2f5; padding: 0.15rem 0.4rem; border-radius: 4px; }
+    article pre code { background: none; padding: 0; }
+    article blockquote { border-left: 3px solid var(--border); padding-left: 1rem; color: var(--muted); margin: 0 0 1rem; }
+    article hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    article img { max-width: 100%; border-radius: 6px; }
+    article table { border-collapse: collapse; width: 100%; margin-bottom: 1rem; }
+    article th, article td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+    article th { background: #f6f8fa; }
+    /* Tags */
+    .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 2rem; }
+    .tag { background: #f0f2f5; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/" class="site-title">{{.Site.Title}}</a>
+    </nav>
+  </header>
+  <main>
+    {{block "content" .}}{{end}}
+  </main>
+  <footer>
+    <p>© {{.Year}} {{.Site.Author}} · Built with <a href="https://github.com/A-Murchison/goblog">goblog</a></p>
+  </footer>
+</body>
+</html>
+{{end}}
