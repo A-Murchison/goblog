@@ -2,19 +2,25 @@
 
 [example](https://a-murchison.github.io/goblog)
 
-A minimal static site generator written in Go. Host your site free in Github Pages. 
+A minimal static site generator written in Go. Host your site free in Github Pages.
 
 Drop Markdown files into `posts/`, run one command, get a blog.
 
 Configure the items in the templates folder to make it your own.
 
+## Requirements
+
+Go 1.26+
+
 ## Quick Start
 
-### 1. Clone and configure
+### 1. Create your repo from the template
+
+Click **Use this template → Create a new repository** on GitHub, then clone your new repo:
 
 ```bash
-git clone https://github.com/A-Murchison/goblog
-cd goblog
+git clone https://github.com/yourusername/your-repo-name
+cd your-repo-name
 ```
 
 Edit `config.json`:
@@ -29,6 +35,8 @@ Edit `config.json`:
 ```
 
 ### 2. Write a post
+
+A sample post (`posts/hello-world.md`) is included — delete or replace it.
 
 Create a `.md` file in `posts/`:
 
@@ -57,11 +65,12 @@ Static files are written to `public/`.
 go run main.go serve        # http://localhost:8080
 go run main.go serve 3000   # http://localhost:3000
 ```
+
 ## Deploying to GitHub Pages
 
 1. Push the repo to GitHub
 2. Go to **Settings → Pages**
-3. Under **Source**, select **GitHub Actions**
+3. Under **Build and deployment → Source**, select **GitHub Actions**
 
 The included workflow builds and deploys on every push to `main`.
 
