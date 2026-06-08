@@ -257,14 +257,6 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 			return fmt.Errorf("parsing page template: %w", err)
 		}
 		for _, pg := range pages {
-			if reservedNames[pg.Slug] {
-				return fmt.Errorf("invalid page slug %q: name is reserved", pg.Slug)
-			}
-			for _, ct := range site.ContentTypes {
-				if pg.Slug == ct {
-					return fmt.Errorf("invalid page slug %q: conflicts with content type", pg.Slug)
-				}
-			}
 			pgDir := filepath.Join(outputDir, pg.Slug)
 			if err := os.MkdirAll(pgDir, 0755); err != nil {
 				return fmt.Errorf("creating page dir %s: %w", pgDir, err)
@@ -328,7 +320,6 @@ func loadContent(dir, contentType string) ([]*PostView, error) {
 			title = strings.ReplaceAll(slug, "-", " ")
 		}
 
-		image := strings.TrimLeft(post.Image, "/")
 		items = append(items, &PostView{
 			Title:       title,
 			Date:        post.Date,
@@ -336,8 +327,7 @@ func loadContent(dir, contentType string) ([]*PostView, error) {
 			Tags:        post.Tags,
 			Slug:        slug,
 			Type:        contentType,
-			Image:       strings.TrimPrefix(post.Image, "/"),
-			Link:        post.Link,
+			Image:       strings.TrimLeft(post.Image, "/"),
 			Content:     template.HTML(rewriteStaticPaths(post.Content)), // safe: HTML passthrough disabled in renderer
 		})
 	}
