@@ -121,13 +121,13 @@ Paths resolve to `localhost:8080/static/...` when serving, or `baseURL/static/..
 
 ## Frontmatter Reference
 
-| Key           | Required | Example                    |
-| ------------- | -------- | -------------------------- |
-| `title`       | No       | `My Post Title`            |
-| `date`        | No       | `2026-06-05`               |
-| `description` | No       | `A short summary.`         |
-| `tags`        | No       | `[go, web, tutorial]`      |
-| `image`       | No       | `static/my-cover.jpg`      |
+| Key           | Required | Example               |
+| ------------- | -------- | --------------------- |
+| `title`       | No       | `My Post Title`       |
+| `date`        | No       | `2026-06-05`          |
+| `description` | No       | `A short summary.`    |
+| `tags`        | No       | `[go, web, tutorial]` |
+| `image`       | No       | `static/my-cover.jpg` |
 
 If `title` is omitted, the filename is used (hyphens → spaces).
 
