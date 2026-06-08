@@ -15,6 +15,8 @@ type Post struct {
 	Date        time.Time
 	Description string
 	Tags        []string
+	Image       string
+	Link        string
 	Content     string // rendered HTML
 }
 
@@ -73,6 +75,10 @@ func parseFrontmatter(src []byte, post *Post) []byte {
 					post.Tags = append(post.Tags, t)
 				}
 			}
+		case "image":
+			post.Image = strings.Trim(value, `"'`)
+		case "link":
+			post.Link = strings.Trim(value, `"'`)
 		}
 	}
 
