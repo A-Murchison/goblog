@@ -1,0 +1,25 @@
+{{define "title"}}{{.ContentType}} - {{.Site.Title}}{{end}}
+{{define "meta-description"}}{{.Site.Description}}{{end}}
+
+{{define "content"}}
+<h1 class="page-heading"><span class="prefix">~/</span>{{.ContentType}}</h1>
+{{if .Posts}}
+<div class="card-grid">
+  {{range .Posts}}
+  <a href="{{.Type}}/{{.Slug}}/" class="card">
+    <div class="card-image">
+      {{if .Image}}<img src="{{.Image}}" alt="{{.Title}}">{{else}}<div class="card-image-bg"><span class="card-placeholder-icon">&lt;/&gt;</span></div>{{end}}
+    </div>
+    <div class="card-body">
+      {{if not .Date.IsZero}}<time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "Jan 2, 2006"}}</time>{{end}}
+      <h3 class="card-title">{{.Title}}</h3>
+      {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
+      {{if .Tags}}<div class="tags">{{range .Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+    </div>
+  </a>
+  {{end}}
+</div>
+{{else}}
+<p>No {{.ContentType}} yet.</p>
+{{end}}
+{{end}}

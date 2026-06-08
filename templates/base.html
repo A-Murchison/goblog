@@ -34,6 +34,12 @@
     footer { border-top: 1px solid var(--border); padding: 1.5rem 0; text-align: center; color: var(--muted); font-size: 0.875rem; margin-top: auto; }
     /* Index */
     h2.index-heading { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .section-heading { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    section { margin-bottom: 3rem; }
+    .view-all { display: inline-block; margin-top: 1.25rem; color: var(--muted); font-size: 0.875rem; }
+    .view-all:hover { color: var(--accent); text-decoration: underline; }
+    .page-heading { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.75rem; }
+    .page-heading .prefix { color: var(--muted); font-weight: 400; }
     .post-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
     .post-list li { padding: 1.1rem 1.25rem; border: 1px solid var(--border); border-radius: 8px; position: relative; transition: background 0.15s ease; }
     .post-list li:hover { background: var(--hover-bg); }
@@ -68,11 +74,26 @@
     article .tags { margin-top: 2rem; }
     .tag { background: #f0f2f5; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; color: var(--muted); }
     /* Post hero image */
-    .post-hero-image { margin-bottom: 2rem; border-radius: 6px; overflow: hidden; aspect-ratio: 2 / 1; }
-    .post-hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    /* Post card image */
-    .post-card-image { border-radius: 4px; overflow: hidden; aspect-ratio: 16 / 9; margin-bottom: 0.75rem; }
-    .post-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .post-hero-image { margin-bottom: 2rem; border-radius: 6px; overflow: hidden; aspect-ratio: 2 / 1; max-width: 680px; }
+    .post-hero-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Card grid */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.15s, transform 0.15s; color: inherit; text-decoration: none; background: var(--bg); }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); text-decoration: none; }
+    .card-image { aspect-ratio: 16 / 9; overflow: hidden; flex-shrink: 0; }
+    .card-image img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .card-image-bg { width: 100%; height: 100%; background: var(--hover-bg); display: flex; align-items: center; justify-content: center; }
+    .card-placeholder-icon { color: var(--border); font-size: 1.125rem; font-weight: 700; letter-spacing: -0.05em; user-select: none; }
+    .card-body { padding: 0.9rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.35rem; }
+    .card-body time { font-size: 0.75rem; color: var(--muted); }
+    .card-title { font-size: 0.9375rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .card:hover .card-title { color: var(--accent); }
+    .card-desc { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; flex: 1; }
+    .card-body .tags { margin-top: auto; padding-top: 0.5rem; }
+    /* Nav links */
+    .nav-links { display: flex; gap: 1.5rem; margin-left: auto; }
+    .nav-links a { color: var(--muted); font-size: 0.875rem; }
+    .nav-links a:hover { color: var(--accent); text-decoration: none; }
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #0f1117;
@@ -87,6 +108,7 @@
       article pre code { background: none; }
       article th { background: #1e2330; }
       .tag { background: #1e2330; }
+      .card-image-bg { background: #1e2330; }
     }
   </style>
 </head>
@@ -94,6 +116,7 @@
   <header>
     <nav>
       <a href="./" class="site-title">{{.Site.Title}}</a>
+      {{if .Site.ContentTypes}}<div class="nav-links">{{range .Site.ContentTypes}}<a href="{{.}}/">{{.}}</a>{{end}}</div>{{end}}
     </nav>
   </header>
   <main>

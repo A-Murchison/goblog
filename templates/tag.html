@@ -1,8 +1,8 @@
 {{define "title"}}#{{.Tag}} - {{.Site.Title}}{{end}}
 
 {{define "content"}}
-<a href="./" class="back-link">← All posts</a>
-<h2 class="index-heading">Posts tagged &#34;{{.Tag}}&#34;</h2>
+<a href="./" class="back-link">← home</a>
+<h1 class="page-heading"><span class="prefix">#</span>{{.Tag}}</h1>
 {{if .Posts}}
 <ul class="post-list">
   {{range .Posts}}

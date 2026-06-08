@@ -1,19 +1,26 @@
 {{define "title"}}{{.Site.Title}}{{end}}
 
 {{define "content"}}
-<h2 class="index-heading">posts</h2>
 {{if .Posts}}
-<ul class="post-list">
-  {{range .Posts}}
-  <li>
-    {{if .Image}}<div class="post-card-image"><img src="{{.Image}}" alt="{{.Title}}"></div>{{end}}
-    <h2><a href="posts/{{.Slug}}/">{{.Title}}</a></h2>
-    {{if not .Date.IsZero}}<time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>{{end}}
-    {{if .Description}}<p class="desc">{{.Description}}</p>{{end}}
-    {{if .Tags}}<div class="tags">{{range .Tags}}<a href="tags/{{.}}/" class="tag">{{.}}</a>{{end}}</div>{{end}}
-  </li>
-  {{end}}
-</ul>
+<section>
+  <h2 class="section-heading">posts</h2>
+  <div class="card-grid">
+    {{range .Posts}}
+    <a href="posts/{{.Slug}}/" class="card">
+      <div class="card-image">
+        {{if .Image}}<img src="{{.Image}}" alt="{{.Title}}">{{else}}<div class="card-image-bg"><span class="card-placeholder-icon">&lt;/&gt;</span></div>{{end}}
+      </div>
+      <div class="card-body">
+        {{if not .Date.IsZero}}<time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "Jan 2, 2006"}}</time>{{end}}
+        <h3 class="card-title">{{.Title}}</h3>
+        {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
+        {{if .Tags}}<div class="tags">{{range .Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+      </div>
+    </a>
+    {{end}}
+  </div>
+  <a href="posts/" class="view-all">view all posts →</a>
+</section>
 {{else}}
 <p>No posts yet. Add Markdown files to the <code>posts/</code> directory and run <code>go run main.go build</code>.</p>
 {{end}}
