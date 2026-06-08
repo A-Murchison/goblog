@@ -79,7 +79,8 @@ The included workflow builds and deploys on every push to `main`.
 ## Features
 
 - Markdown → HTML via [gomarkdown](https://github.com/gomarkdown/markdown)
-- YAML frontmatter (`title`, `date`, `description`, `tags`)
+- YAML frontmatter (`title`, `date`, `description`, `tags`, `image`)
+- Post card thumbnails and full-width hero images via the `image` frontmatter field
 - Self-contained HTML templates (inline CSS, no external dependencies)
 - Optional `static/` directory for assets
 - GitHub Actions workflow for auto-deploy to GitHub Pages on push to `main`
@@ -120,14 +121,29 @@ Paths resolve to `localhost:8080/static/...` when serving, or `baseURL/static/..
 
 ## Frontmatter Reference
 
-| Key           | Required | Example               |
-| ------------- | -------- | --------------------- |
-| `title`       | No       | `My Post Title`       |
-| `date`        | No       | `2026-06-05`          |
-| `description` | No       | `A short summary.`    |
-| `tags`        | No       | `[go, web, tutorial]` |
+| Key           | Required | Example                    |
+| ------------- | -------- | -------------------------- |
+| `title`       | No       | `My Post Title`            |
+| `date`        | No       | `2026-06-05`               |
+| `description` | No       | `A short summary.`         |
+| `tags`        | No       | `[go, web, tutorial]`      |
+| `image`       | No       | `static/my-cover.jpg`      |
 
 If `title` is omitted, the filename is used (hyphens → spaces).
+
+### Images
+
+Add an `image` field to a post's frontmatter to display a thumbnail on the post list and a full-width hero at the top of the post:
+
+```markdown
+---
+title: My Post
+date: 2026-06-05
+image: static/my-cover.jpg
+---
+```
+
+Place the image file in `static/` so it is copied to `public/static/` at build time.
 
 ## Custom Content Types
 
