@@ -2,7 +2,7 @@
 {{define "meta-description"}}{{.Post.Description}}{{end}}
 
 {{define "content"}}
-<a href="../{{.Post.Type}}/" class="back-link">← {{.Post.Type}}</a>
+<a href="{{.Post.Type}}/" class="back-link">← {{.Post.Type}}</a>
 {{if .Post.Image}}
 <div class="post-hero-image">
   <img src="{{.Post.Image}}" alt="{{.Post.Title}}">
