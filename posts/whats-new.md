@@ -3,7 +3,7 @@ title: whats new
 date: 2026-06-05
 description: goblog updates. right here.
 tags: [go, updates]
-image: /static/demo.gif
+image: static/demo.gif
 ---
 
 # updates

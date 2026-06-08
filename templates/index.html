@@ -1,12 +1,15 @@
 {{define "title"}}{{.Site.Title}}{{end}}
 
 {{define "content"}}
-{{if .Posts}}
+{{range .Site.ContentTypes}}
+{{$type := .}}
+{{$items := index $.ContentItems $type}}
+{{if $items}}
 <section>
-  <h2 class="section-heading">posts</h2>
+  <h2 class="section-heading">{{$type}}</h2>
   <div class="card-grid">
-    {{range .Posts}}
-    <a href="posts/{{.Slug}}/" class="card">
+    {{range $items}}
+    <a href="{{.Type}}/{{.Slug}}/" class="card">
       <div class="card-image">
         {{if .Image}}<img src="{{.Image}}" alt="{{.Title}}">{{else}}<div class="card-image-bg"><span class="card-placeholder-icon">&lt;/&gt;</span></div>{{end}}
       </div>
@@ -19,9 +22,8 @@
     </a>
     {{end}}
   </div>
-  <a href="posts/" class="view-all">view all posts →</a>
+  <a href="{{$type}}/" class="view-all">view all {{$type}} →</a>
 </section>
-{{else}}
-<p>No posts yet. Add Markdown files to the <code>posts/</code> directory and run <code>go run main.go build</code>.</p>
+{{end}}
 {{end}}
 {{end}}

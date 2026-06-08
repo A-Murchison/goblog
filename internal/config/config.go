@@ -14,9 +14,6 @@ type Site struct {
 	Description  string   `json:"description"`
 	BaseURL      string   `json:"baseURL"`
 	Author       string   `json:"author"`
-	Tagline      string   `json:"tagline"`
-	GitHub       string   `json:"github"`
-	LinkedIn     string   `json:"linkedin"`
 	ContentTypes []string `json:"contentTypes"`
 }
 

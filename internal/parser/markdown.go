@@ -16,7 +16,6 @@ type Post struct {
 	Description string
 	Tags        []string
 	Image       string
-	Link        string
 	Content     string // rendered HTML
 }
 
@@ -77,8 +76,6 @@ func parseFrontmatter(src []byte, post *Post) []byte {
 			}
 		case "image":
 			post.Image = strings.Trim(value, `"'`)
-		case "link":
-			post.Link = strings.Trim(value, `"'`)
 		}
 	}
 

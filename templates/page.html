@@ -1,0 +1,15 @@
+{{define "title"}}{{.Post.Title}} - {{.Site.Title}}{{end}}
+{{define "meta-description"}}{{.Post.Description}}{{end}}
+
+{{define "content"}}
+<a href="./" class="back-link">← home</a>
+{{if .Post.Image}}
+<div class="post-hero-image">
+  <img src="{{.Post.Image}}" alt="{{.Post.Title}}">
+</div>
+{{end}}
+<article>
+  <h1>{{.Post.Title}}</h1>
+  {{.Post.Content}}
+</article>
+{{end}}

@@ -23,18 +23,18 @@ type PostView struct {
 	Slug        string
 	Type        string
 	Image       string
-	Link        string
 	Content     template.HTML
 }
 
 // PageData is passed to every template execution.
 type PageData struct {
-	Site        *config.Site
-	Post        *PostView   // populated for post pages
-	Posts       []*PostView // populated for the index and tag pages
-	Tag         string      // populated for tag pages
-	ContentType string      // populated for content-type listing pages
-	Year        int
+	Site         *config.Site
+	Post         *PostView              // populated for post pages
+	Posts        []*PostView            // populated for the tag and list pages
+	ContentItems map[string][]*PostView // populated for the index page (keyed by content type)
+	Tag          string                 // populated for tag pages
+	ContentType  string                 // populated for content-type listing pages
+	Year         int
 }
 
 // Build reads posts from rootDir/posts/, renders HTML, and writes to outputDir.
@@ -51,6 +51,7 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 	tmplDir := filepath.Join(rootDir, "templates")
 	baseTmpl := filepath.Join(tmplDir, "base.html")
 	postTmpl := filepath.Join(tmplDir, "post.html")
+	listTmpl := filepath.Join(tmplDir, "list.html")
 	indexTmpl := filepath.Join(tmplDir, "index.html")
 	tagTmpl := filepath.Join(tmplDir, "tag.html")
 	pageTmpl := filepath.Join(tmplDir, "page.html")
@@ -126,13 +127,34 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 			}
 			fmt.Printf("  Built: %s/%s/\n", contentType, item.Slug)
 		}
+
+		// Render content-type list page ({type}/index.html).
+		listT, err := template.ParseFiles(baseTmpl, listTmpl)
+		if err != nil {
+			return fmt.Errorf("parsing list template: %w", err)
+		}
+		listPath := filepath.Join(typeOutDir, "index.html")
+		lf, err := os.Create(listPath)
+		if err != nil {
+			return fmt.Errorf("creating %s/index.html: %w", contentType, err)
+		}
+		err = listT.ExecuteTemplate(lf, "base", PageData{Site: site, Posts: items, ContentType: contentType, Year: year})
+		lf.Close()
+		if err != nil {
+			return fmt.Errorf("rendering %s list: %w", contentType, err)
+		}
+		fmt.Printf("  Built: %s/index.html\n", contentType)
 	}
 
-	// Homepage shows the 5 most recent posts
-	homepageItems := contentItems["posts"]
-	const maxHomepagePosts = 5
-	if len(homepageItems) > maxHomepagePosts {
-		homepageItems = homepageItems[:maxHomepagePosts]
+	// Build homepage preview: cap each content type to 5 most-recent items.
+	const maxHomepageItems = 5
+	homepageContentItems := make(map[string][]*PostView, len(site.ContentTypes))
+	for _, ct := range site.ContentTypes {
+		items := contentItems[ct]
+		if len(items) > maxHomepageItems {
+			items = items[:maxHomepageItems]
+		}
+		homepageContentItems[ct] = items
 	}
 
 	// Render index page.
@@ -146,7 +168,7 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 		if err != nil {
 			return fmt.Errorf("creating index.html: %w", err)
 		}
-		err = tmpl.ExecuteTemplate(f, "base", PageData{Site: site, Posts: homepageItems, Year: year})
+		err = tmpl.ExecuteTemplate(f, "base", PageData{Site: site, ContentItems: homepageContentItems, Year: year})
 		f.Close()
 		if err != nil {
 			return fmt.Errorf("rendering index: %w", err)
@@ -219,6 +241,16 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 		if err != nil {
 			return fmt.Errorf("loading pages: %w", err)
 		}
+		// Validate page slugs do not collide with reserved output directories.
+		pageReserved := map[string]bool{"tags": true, "static": true, "pages": true}
+		for _, ct := range site.ContentTypes {
+			pageReserved[ct] = true
+		}
+		for _, pg := range pages {
+			if pageReserved[pg.Slug] {
+				return fmt.Errorf("page slug %q conflicts with a reserved output directory", pg.Slug)
+			}
+		}
 		pageItems = pages
 		pageT, err := template.ParseFiles(baseTmpl, pageTmpl)
 		if err != nil {
@@ -288,6 +320,7 @@ func loadContent(dir, contentType string) ([]*PostView, error) {
 			title = strings.ReplaceAll(slug, "-", " ")
 		}
 
+		image := strings.TrimLeft(post.Image, "/")
 		items = append(items, &PostView{
 			Title:       title,
 			Date:        post.Date,
@@ -295,8 +328,7 @@ func loadContent(dir, contentType string) ([]*PostView, error) {
 			Tags:        post.Tags,
 			Slug:        slug,
 			Type:        contentType,
-			Image:       post.Image,
-			Link:        post.Link,
+			Image:       image,
 			Content:     template.HTML(rewriteStaticPaths(post.Content)), // safe: HTML passthrough disabled in renderer
 		})
 	}
