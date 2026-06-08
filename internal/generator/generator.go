@@ -225,6 +225,14 @@ func Build(rootDir, outputDir, baseURLOverride string) error {
 			return fmt.Errorf("parsing page template: %w", err)
 		}
 		for _, pg := range pages {
+			if reservedNames[pg.Slug] {
+				return fmt.Errorf("invalid page slug %q: name is reserved", pg.Slug)
+			}
+			for _, ct := range site.ContentTypes {
+				if pg.Slug == ct {
+					return fmt.Errorf("invalid page slug %q: conflicts with content type", pg.Slug)
+				}
+			}
 			pgDir := filepath.Join(outputDir, pg.Slug)
 			if err := os.MkdirAll(pgDir, 0755); err != nil {
 				return fmt.Errorf("creating page dir %s: %w", pgDir, err)
