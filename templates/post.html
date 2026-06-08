@@ -3,6 +3,11 @@
 
 {{define "content"}}
 <a href="./" class="back-link">← All posts</a>
+{{if .Post.Image}}
+<div class="post-hero-image">
+  <img src="{{.Post.Image}}" alt="{{.Post.Title}}">
+</div>
+{{end}}
 <article>
   <h1>{{.Post.Title}}</h1>
   <span class="post-meta">
