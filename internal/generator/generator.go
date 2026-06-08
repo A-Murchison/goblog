@@ -303,7 +303,7 @@ func loadContent(dir, contentType string) ([]*PostView, error) {
 			Tags:        post.Tags,
 			Slug:        slug,
 			Type:        contentType,
-			Image:       post.Image,
+			Image:       strings.TrimPrefix(post.Image, "/"),
 			Link:        post.Link,
 			Content:     template.HTML(rewriteStaticPaths(post.Content)), // safe: HTML passthrough disabled in renderer
 		})
